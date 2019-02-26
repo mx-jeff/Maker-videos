@@ -1,0 +1,19 @@
+{
+  "name": "maker-videos",
+  "version": "1.0.0",
+  "description": "Projeto de videos automatizados",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DZ0Jeff/Maker-videos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DZ0Jeff/Maker-videos/issues"
+  },
+  "homepage": "https://github.com/DZ0Jeff/Maker-videos#readme"
+}
