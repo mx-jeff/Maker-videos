@@ -1,31 +1,18 @@
-/*@robo escravo*/
-const readline = require('readline-sync')
+/*robo escravo*/
+
 const robots = {
-	text: require('./robots/text.js')
+	input: require('./robots/input.js'),
+	text: require('./robots/text.js'),
+	state: require('./robots/state.js')
 }
 
 async function start(){
-	const content = {
-		maximumSentences: 7
-	}
+	
+	robots.input()
+	await robots.text()
 
-	content.searchTerm = askAndReturnSearchTerm()
-	content.prefix = askAndReturnPrefix()
-
-	await robots.text(content)
-
-	function askAndReturnSearchTerm(argument) {
-		return readline.question('Wikipedia: ')
-	}
-
-	function askAndReturnPrefix(){
-		const prefixes = ['Quem e', 'O que e', 'A historia de']
-		const selectedPrefixIndex = readline.keyInSelect(prefixes, 'Escolha uma option: ') 
-		const selectedPrefixText = prefixes[selectedPrefixIndex]
-
-		return selectedPrefixText
-	}
-	console.log(JSON.stringify(content, null, 4))
+	const content = robots.state.load()
+	console.dir(content, { depth: null })
 }
 
 start()
