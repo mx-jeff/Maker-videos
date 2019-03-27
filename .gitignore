@@ -62,3 +62,6 @@ typings/
 
 #credentails
 credentials/*json
+
+#file-retriview
+content.json
