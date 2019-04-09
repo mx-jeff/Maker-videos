@@ -65,3 +65,6 @@ credentials/*json
 
 #file-retriview
 content.json
+
+#images
+content/*.png
