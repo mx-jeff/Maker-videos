@@ -1,5 +1,8 @@
 const gm = require('gm').subClass({imageMagick: true})
 const state = require('./state.js')
+const spawn = require('child_process').spawn
+const path = require('path')
+const rootPath = path.resolve(__dirname, '..')
 
 async function robot(){
 	const content = state.load()
@@ -8,6 +11,7 @@ async function robot(){
 	await createAllSentencesImages(content)
 	await createYoutubeThumbnail()
 	await createAfterEffectsScripts(content)
+	await renderVideoWithAfterEffects()
 
 	state.save(content)
 
@@ -132,6 +136,32 @@ async function robot(){
 
 	async function createAfterEffectsScripts(content){
 		await state.saveScript(content)
+		console.log(`Created after scripts file`)
+	}
+
+	async function renderVideoWithAfterEffects(){
+		return new Promise((resolve, reject) => {
+			const aerenderFilePath = 'C:/Program Files/Adobe/Adobe After Effects CC 2019/Support Files/aerender.exe'
+			const templateFilePath = `${rootPath}/templates/1/template.aep`
+			const destinationFilePath = `${rootPath}/content/output.mov`
+
+			console.log('> starting After Effects Render')
+
+			const aerender = spawn(aerenderFilePath, [
+				'-comp', 'main',
+				'-project', templateFilePath,
+				'-output', destinationFilePath,
+			])
+
+			aerender.stdout.on('data', (data) => {
+				process.stdout.write(data)
+			})
+
+			aerender.on('close', () => {
+				console.log('> After Effects closed')
+				resolve()
+			})
+		})
 	}
 
 }

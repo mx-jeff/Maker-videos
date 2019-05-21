@@ -68,3 +68,11 @@ content.json
 
 #images
 content/*.png
+
+#script
+content/*.js
+
+#video
+content/*.mov
+Adobe After Effects Auto-Save
+template.aep Logs
