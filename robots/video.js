@@ -7,10 +7,10 @@ const rootPath = path.resolve(__dirname, '..')
 async function robot(){
 	const content = state.load()
 
-	await convertAllImages(content)
-	await createAllSentencesImages(content)
-	await createYoutubeThumbnail()
-	await createAfterEffectsScripts(content)
+	//await convertAllImages(content)
+	//await createAllSentencesImages(content)
+	//await createYoutubeThumbnail()
+	//await createAfterEffectsScripts(content)
 	await renderVideoWithAfterEffects()
 
 	state.save(content)
