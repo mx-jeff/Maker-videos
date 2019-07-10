@@ -74,5 +74,8 @@ content/*.js
 
 #video
 content/*.mov
-Adobe After Effects Auto-Save
-template.aep Logs
+templates/1/Salvamento automatico do Adobe After Effects
+templates/1/Logs de template.aep
+
+#debug
+debug
