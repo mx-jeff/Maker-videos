@@ -5,12 +5,13 @@ const path = require('path')
 const rootPath = path.resolve(__dirname, '..')
 
 async function robot(){
+	console.log(`> [Video-robot] Starting...`)
 	const content = state.load()
 
-	//await convertAllImages(content)
-	//await createAllSentencesImages(content)
-	//await createYoutubeThumbnail()
-	//await createAfterEffectsScripts(content)
+	await convertAllImages(content)
+	await createAllSentencesImages(content)
+	await createYoutubeThumbnail()
+	await createAfterEffectsScripts(content)
 	await renderVideoWithAfterEffects()
 
 	state.save(content)
@@ -53,7 +54,7 @@ async function robot(){
 				    return reject(error)
 				  }
 
-				  console.log(`> Image converted: ${inputFile}`)
+				  console.log(`> [Video-robot] Image converted: ${outputFile}`)
 				  resolve()
 				})
 		})
@@ -113,7 +114,7 @@ async function robot(){
 						return reject(error)
 					}
 
-					console.log(`> Sentence created: ${outputFile}`)
+					console.log(`> [Video-robot] Sentence created: ${outputFile}`)
 					resolve()
 				})
 		})
@@ -129,14 +130,15 @@ async function robot(){
 						return reject(error)
 					}
 
-					console.log('> creating youtube thumbnail')
+					console.log('> [Video-robot] youtube thumbnail created')
+					resolve()
 				})
 		})
 	}
 
 	async function createAfterEffectsScripts(content){
 		await state.saveScript(content)
-		console.log(`Created after scripts file`)
+		console.log(` [Video-robot] Created after scripts file`)
 	}
 
 	async function renderVideoWithAfterEffects(){
@@ -145,7 +147,7 @@ async function robot(){
 			const templateFilePath = `${rootPath}/templates/1/template.aep`
 			const destinationFilePath = `${rootPath}/content/output.mov`
 
-			console.log('> starting After Effects Render')
+			console.log('> [Video-robot] starting After Effects Render')
 
 			const aerender = spawn(aerenderFilePath, [
 				'-comp', 'main',
@@ -158,7 +160,7 @@ async function robot(){
 			})
 
 			aerender.on('close', () => {
-				console.log('> After Effects closed')
+				console.log('> [Video-robot] After Effects closed')
 				resolve()
 			})
 		})

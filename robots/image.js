@@ -6,6 +6,7 @@ const state = require('./state.js')
 const googleSearchCredentials = require('../credentials/google-search.json')
 
 async function robot() {
+	console.log(`> [Image-robot] Starting...`)
 	const content = state.load()
 
 	await fetchImagesOfAllSetences(content)
@@ -14,12 +15,40 @@ async function robot() {
 	state.save(content)
 
 	async function fetchImagesOfAllSetences(content){
-		for (const sentence of content.sentences){
-			const query = `${content.searchTerm} ${sentence.keywords[0]}`
-			sentence.images = await fetchGoogleAndReturnImagesLinks(query)
 
-			sentence.gooogleSearchQuery = query
+		await catchTheThumbnailImage()
+		//await catchTheCommomSentences()
+
+		async function catchTheCommomSentences(){
+
+			for(const sentence of content.sentences){
+				const query = `${content.searchTerm} ${sentence.keywords[0]}`
+				console.log(`[Image-robot] Querying Google Images with ${query}`)
+
+				sentence.images = await fetchGoogleAndReturnImagesLinks(query)
+
+				sentence.gooogleSearchQuery = query
+			}
 		}
+
+		async function catchTheThumbnailImage(){
+			
+			for (let sentenceIndex = 0; sentenceIndex < content.sentences.length; sentenceIndex++){
+				let query
+
+				if(sentenceIndex === 0){
+					query = `${content.searchTerm}`
+				} else{
+					query = `${content.searchTerm} ${content.sentences[sentenceIndex].keywords[0]}`
+				}
+
+				console.log(`> [Image-robot] Querying Google Images with ${query}`)
+
+				content.sentences[sentenceIndex].images = await fetchGoogleAndReturnImagesLinks(query)
+				content.sentences[sentenceIndex].gooogleSearchQuery = query
+			}
+		}
+		//[BUG] Bandas com o mesmo nome e musica, baixam uma imagem a menos
 	}	
 
 	async function fetchGoogleAndReturnImagesLinks(query) {
@@ -52,16 +81,16 @@ async function robot() {
 
 				try {
 					if (content.downloadedImages.includes(imageUrl)){
-						throw new Error('Imagem já baixada!')
+						throw new Error(' [Image-robot] Imagem already downloaded!')
 					}
 					
 					await downloadAnSave(imageUrl, `${sentenceIndex}-original.png`)
 					content.downloadedImages.push(imageUrl)
-					console.log(`> [${sentenceIndex}][${imageIndex}] Baixou a imagem com sucesso! ${imageUrl} `)
+					console.log(`> [Image-robot] [${sentenceIndex}][${imageIndex}] Image sucessfully downloaded ${imageUrl} `)
 					break
 				}
 				catch(error){
-					console.log(`> [${sentenceIndex}][${imageIndex}] Erro ao baixar (${imageUrl}): ${error} `)
+					console.log(`> [Image-robot] [${sentenceIndex}][${imageIndex}] Download error (${imageUrl}): ${error} `)
 				}
 			}
 		}
